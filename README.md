@@ -1,1 +1,1 @@
-A tool to crawl Android App.
+A tool to crawl Android Apps.

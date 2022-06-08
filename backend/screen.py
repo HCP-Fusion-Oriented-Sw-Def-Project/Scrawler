@@ -55,14 +55,8 @@ class Screen():
             if not is_node_in_list(node, self.has_clicked_nodes) and \
                     node.attrib['clickable'] == 'true' and \
                     node.attrib['resource-id'] not in id_list:
-                # # 只对不为空的id元素进行过滤
-                # if node.attrib['resource-id'] != '':
-                #     id_list.append(node.attrib['resource-id'])
 
                 clickable_nodes.append(node)
-
-        # # 按照元素的面积大小进行排序
-        # clickable_nodes.sort(key=lambda x: x.width * x.height, reverse=True)
 
         print('当前页面待点击数量' + str(len(clickable_nodes)))
         logging.info('当前页面待点击数量' + str(len(clickable_nodes)))
@@ -83,35 +77,7 @@ class Screen():
         """
 
         clickable_nodes = []
-        # id_list = []
 
-        # for node in self.nodes:
-        #     if not node.children:
-        #         if not is_node_in_list(node, self.has_clicked_nodes) and \
-        #                 node.attrib['clickable'] == 'true' and \
-        #                 node.attrib['resource-id'] not in id_list and not is_ignored_node(node):
-        #
-        #             # # 只对不为空的id元素进行过滤
-        #             # if node.attrib['resource-id'] != '':
-        #             #     id_list.append(node.attrib['resource-id'])
-        #
-        #             clickable_nodes.append(node)
-        #
-        #     # 如果当前可点击的元素不是叶子元素 那么将其内部所有的叶子元素 都视为可点击元素
-        #     else:
-        #         if node.attrib['clickable'] == 'true':
-        #             for desc in node.descendants:
-        #                 if not desc.children:
-        #                     if not is_node_in_list(desc, self.has_clicked_nodes) and \
-        #                             desc.attrib['resource-id'] not in id_list and not is_ignored_node(desc):
-        #
-        #                         # 只对不为空的id元素进行过滤
-        #                         if desc.attrib['resource-id'] != '':
-        #                             id_list.append(desc.attrib['resource-id'])
-        #
-        #                         clickable_nodes.append(desc)
-
-        # num = 0
         for node in self.nodes:
             if node.attrib['clickable'] == 'true':
                 # num += 1
@@ -145,7 +111,6 @@ class Screen():
                                     # 在这里加个break可以过滤 触发相同转移的操作
                                     # break
 
-        # print('可点击数量' + str(num))
         print('当前页面待点击数量' + str(len(clickable_nodes)))
 
         if not clickable_nodes:
@@ -256,8 +221,6 @@ def is_same_screen(x_screen, y_screen, distinct_rate):
     if count / max(len(x_xpath_list), len(y_xpath_list)) >= distinct_rate:
         return True
 
-    # print(count / max(len(x_xpath_list), len(y_xpath_list)))
-
     return False
 
 
@@ -266,12 +229,6 @@ def is_node_in_list(tmp_node, node_list):
     判断一个元素是否存在于列表当中
     :return:
     """
-
-    # for node in node_list:
-    #     if tmp_node.full_xpath == node.full_xpath:
-    #         return True
-    #
-    # return False
 
     for node in node_list:
         if tmp_node.idx == node.idx:

@@ -1,7 +1,6 @@
 import os
 import pickle
 import cv2
-import logging
 
 from utility import get_screen_sim, is_xpath_matched, get_elem_distance, is_sim, get_str_sim
 from visualize import VisualTool
@@ -23,19 +22,11 @@ class Comparator:
 
         # # 页面搜集
         self.removed_screens = []
-        # self.matched_screens = []
+
         self.added_screens = []
 
         # 页面映射 专用于对匹配的页面进行映射
         self.screens_map = {}
-
-        #
-        # # 边的搜集
-        # self.removed_edges = []
-        # # # 这里主要强调位置的变化 text的变化 class 的变化
-        # # self.changed_edges = []
-        #
-        # self.added_edges = []
 
         # 相似度阈值
         self.text_sim = 0.5
@@ -46,9 +37,6 @@ class Comparator:
 
         if not os.path.exists(self.result_dir):
             os.makedirs(self.result_dir)
-
-        # file_handler = logging.FileHandler(self.result_dir + '/' + 'log.txt', encoding='utf-8')
-        # logging.basicConfig(level=logging.INFO, handlers={file_handler})
 
     def read_model(self):
         """
@@ -100,14 +88,6 @@ class Comparator:
             img = cv2.imread(screen.shot_dir)
             cv2.imwrite(updated_screen_dir + '/' + str(screen.id) + '.png', img)
 
-        # print(get_screen_sim(self.base_model.screens[5], self.updated_model.screens[6]))
-        # print(get_screen_sim(self.base_model.screens[6], self.updated_model.screens[8]))
-        # #
-        # # for node in self.updated_model.screens[6].nodes:
-        # #     if node.attrib['text'] != '':
-        # #         print(node.attrib['text'])
-        # #         print('-----------')
-
     def map_for_screens(self):
         """
         进行页面映射
@@ -133,51 +113,19 @@ class Comparator:
                 matched_screen.matched_id = base_screen.id
 
         # 然后查看页面的匹配结果
-
-        # print('减少的页面')
-        # logging.info('减少的页面')
-
         for key in self.base_model.screens:
             screen = self.base_model.screens[key]
             if screen.matched_id == -1:
-                # print(screen.id)
-                # logging.info(str(screen.id))
                 self.removed_screens.append(screen.id)
 
-        # print('-------------')
-        # logging.info('-------------')
-        #
-        # print('匹配的页面')
-        # logging.info('匹配的页面')
         for key in self.base_model.screens:
             screen = self.base_model.screens[key]
             if screen.matched_id != -1:
                 self.screens_map[screen.id] = screen.matched_id
 
-                # print('--')
-                # print('base')
-                # print(screen.id)
-                # print('updated')
-                # print(screen.matched_id)
-                # print('--')
-                #
-                # logging.info('--')
-                # logging.info('base')
-                # logging.info(screen.id)
-                # logging.info('updated')
-                # logging.info(screen.matched_id)
-                # logging.info('--')
-
-        # print('--------------')
-        # logging.info('--------------')
-        #
-        # print('新增的页面')
-        # logging.info('新增的页面')
         for key in self.updated_model.screens:
             screen = self.updated_model.screens[key]
             if screen.matched_id == -1:
-                # print(screen.id)
-                # logging.info(str(screen.id))
                 self.added_screens.append(screen.id)
 
     def map_for_edges(self):
@@ -208,27 +156,6 @@ class Comparator:
                             edge.matched_id = u_edge.id
                             u_edge.matched_id = edge.id
                             break
-
-        # # 然后使用str近似 找一次
-        # for edge in self.base_model.edges:
-        #     if edge.begin_id not in self.removed_screens and edge.end_id not in self.removed_screens:
-        #         # 首先映射成新版本的边
-        #         updated_begin_id = self.screens_map[edge.begin_id]
-        #         updated_end_id = self.screens_map[edge.end_id]
-        #
-        #         # 然后开始查找新版本的边当中的映射
-        #         for u_edge in self.updated_model.edges:
-        #             if u_edge.begin_id == updated_begin_id and \
-        #                     u_edge.end_id == updated_end_id and \
-        #                     u_edge.matched_id == -1:
-        #                 # 那么考虑元素是否可以映射上
-        #                 b_node = self.base_model.screens[edge.begin_id].get_node_by_id(edge.node_id)
-        #                 u_node = self.updated_model.screens[updated_begin_id].get_node_by_id(u_edge.node_id)
-        #
-        #                 if is_str_matched(b_node, u_node):
-        #                     edge.matched_id = u_edge.id
-        #                     u_edge.matched_id = edge.id
-        #                     break
 
         # 然后使用文本距离的方法 再找一次
         for edge in self.base_model.edges:
@@ -290,23 +217,6 @@ class Comparator:
                     if is_sim(b_node, m_node):
                         edge.matched_id = matched_edge.id
                         matched_edge.matched_id = edge.id
-
-        # count = 0
-        # for edge in self.base_model.edges:
-        #     if edge.matched_id != -1:
-        #         count += 1
-        #         print('------')
-        #         print('base')
-        #         node = self.base_model.screens[edge.begin_id].get_node_by_id(edge.node_id)
-        #         print(node.attrib)
-        #         print('updated')
-        #         u_edge = self.updated_model.edges[edge.matched_id - 1]
-        #         u_node = self.updated_model.screens[u_edge.begin_id].get_node_by_id(u_edge.node_id)
-        #         print(u_node.attrib)
-        #         print('------')
-        #
-        # print('匹配上的边数')
-        # print(count)
 
     def get_screens_result_by_image(self):
         """
@@ -470,6 +380,5 @@ class Comparator:
 
 
 if __name__ == '__main__':
-    # obj = Comparator('E:/graduation/scrob_experiment/model_comparison/Simple Weather v4.1-v5.3.2')
     obj = Comparator('C:/Users/dell/Desktop/tmp_comparisio')
     obj.work()

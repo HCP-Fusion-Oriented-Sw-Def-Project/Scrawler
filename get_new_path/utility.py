@@ -17,22 +17,6 @@ def get_screen_sim_score(x_screen, y_screen, s_i, s_ii, t_j, t_k):
     :return:
     """
 
-    # activity name 不同 直接返回0
-    # if x_screen.act_name != y_screen.act_name:
-    #     print('activity不同')
-    #     print(x_screen.act_name)
-    #     print(y_screen.act_name)
-    #     return 0
-
-    # 用于记录 tfidf返回的词汇表（因为它会内部处理一些较短词汇 然后如果为空 我自己的处理是补全为none）
-    xx_id_words = []
-    xx_text_words = []
-    xx_content_words = []
-
-    yy_id_words = []
-    yy_text_words = []
-    yy_content_words = []
-
     # 首先分别搜集元素的 id text content-desc
     x_id = []
     x_text = []
@@ -168,15 +152,6 @@ def get_screen_sim_score(x_screen, y_screen, s_i, s_ii, t_j, t_k):
     else:
         final_sim = 0
 
-    # 计算步长cost的公式 jumpCost = log2(|jump_t - jump_s| + 1) + 1
-
-    # jump_t = t_k - t_j
-    # jump_s = s_ii - s_i
-    #
-    # jump_cost = np.log2(abs(jump_t - jump_s) + 1) + 1
-    #
-    # return final_sim / jump_cost
-
     return final_sim
 
 
@@ -236,7 +211,6 @@ def get_edge_sim_score(source_screens, source_edges, screens, edges, x_screen, y
 def is_same_one(x_screen, y_screen):
     """
     判断是否是同一个页面
-    因为有环的话 在场景模型中 这个页面会出现两次 最后的那个页面会无法匹配
     :param x_screen:
     :param y_screen:
     :return:
@@ -250,17 +224,5 @@ def is_same_one(x_screen, y_screen):
 
     for node in y_screen.nodes:
         y_xpath.append(node.xpath[0])
-
-    # print(x_path)
-    # print(y_xpath)
-
-    # count = 0
-    # for xpath in x_path:
-    #     for t_xpath in y_xpath:
-    #         if x_path == t_xpath:
-    #             count += 1
-
-    # if count / max(len(x_path), len(y_xpath)) >= 0.95:
-    #     return True
 
     return False

@@ -22,17 +22,11 @@ class Crawler():
         # 记录每个activity下有多少个页面
         self.act_count = {}
 
-        # 上一个页面的id
-        # self.l  self.act_count = {}ast_screen_id = -1
-
         # 当前页面的id
         self.cur_screen_id = -1
 
         # screen id
         self.screen_id = 1
-
-        # # 目前的工作序列
-        # self.cur_event_sequences = []
 
         # 当前深度
         self.cur_depth = 0
@@ -385,8 +379,6 @@ class Crawler():
         self.open_app()
         time.sleep(5)
 
-        # device(text="Me").click()
-
         # 触发一次监听器
         device.watchers.run()
 
@@ -420,17 +412,6 @@ class Crawler():
 
         self.reopen_app()
 
-        # try:
-        #     tmp_screen = self.get_tmp_screen()
-        #     flag = False
-        #     for node in tmp_screen.nodes:
-        #         if node.attrib['text'] == 'Me':
-        #             flag = True
-        #     if flag:
-        #         device(text='Me').click()
-        # except Exception as e:
-        #     pass
-
         if not self.reopen_to_first:
             # 判断是否能够到达初始状态
             tmp_screen = self.get_tmp_screen()
@@ -440,8 +421,7 @@ class Crawler():
                 print('重新打开app无法回到第一个页面 需要点击back进行回退')
                 logging.info('重新打开app无法回到第一个页面 需要点击back进行回退')
                 try_back_times = 0
-                # 有的app可以一直回退到关闭 但是有的app不行 会一直处于那个页面    第二个条件并不能判定回到了桌面
-                # while exist_screen_id != 1 and self.get_activity_name() != '':
+                # 有的app可以一直回退到关闭 但是有的app不行 会一直处于那个页面
                 while exist_screen_id != 1 and not self.is_at_desktop():
                     try_back_times += 1
                     if try_back_times >= len(self.screens):
@@ -489,10 +469,6 @@ class Crawler():
         if not screen.shortest_transfer_sequences:
             print('需搜索最短重放序列')
             logging.info('需搜索最短重放序列')
-
-            # 下面是递归的搜索方法 暂时不用 使用的是迭代的搜索方法
-            # screen_transfer_sequences = []
-            # self.search_screen_transfer(self.screens[1], screen_transfer_sequences, screen.id)
 
             self.search_screen_transfer_3(self.screens[1].id, screen.id)
             print('重放页面转移序列')
@@ -745,7 +721,6 @@ class Crawler():
                 self.cur_screen_id = self.stack.top()
 
                 # 设备页面进行回退
-                # device.press("back")
                 device.press.back()
                 print('点击back')
                 logging.info('点击back')
@@ -792,17 +767,12 @@ class Crawler():
                 self.cur_screen_id = self.stack.top()
 
                 # 设备页面进行回退
-                # device.press("back")
                 device.press.back()
                 print('点击back')
                 logging.info('点击back')
 
 
             else:
-                """
-                把重放检测放到这里
-                检查的是cur_screen.id 或者self.cur_screen_id 才对
-                """
                 success = True
                 if not self.check_for_cur_state(cur_screen.id):
                     # 使用重放技术到达需要回退的页面 可以尝试尽可能地使用back
@@ -819,14 +789,6 @@ class Crawler():
                     exist_screen_id = self.has_same_screen(tmp_screen)
                     # 如果发生了页面切换
                     if exist_screen_id != self.cur_screen_id:
-
-                        # 测试页面1对后面页面的转换记录
-                        if self.cur_screen_id == 1:
-                            print('记录页面1的转换')
-                            print(exist_screen_id)
-
-                            logging.info('记录页面1的转换')
-                            logging.info(exist_screen_id)
 
                         # 如果不是发现了新界面
                         if exist_screen_id != -1:
@@ -863,40 +825,10 @@ class Crawler():
                             print('点击back')
                             logging.info('点击back')
 
-                            # 在screen中按照id来过滤 好像有时也不靠谱
-                            # edge = Edge(self.cur_screen_id, exist_screen_id, self.clicked_node.idx)
-                            # self.edges.append(edge)
-
-                            # 这样是不对的 会干扰正常的遍历过程
-                            # exist_screen = self.screens[exist_screen_id]
-                            # tmp_clicked_node = exist_screen.get_clickable_leaf_node(self.black_elem_list)
-                            #
-                            # # 如果当前页面已经访问过 且所有元素被点击过
-                            # if tmp_clicked_node is None:
-                            #     # 页面已经已经有了 也是需要回退的
-                            #     device.press.back()
-                            #     print('点击back')
-                            #     logging.info('点击back')
-                            # else:
-                            #     # 如果当前页面被访问过 但是当时的深度太大了 导致没有点击元素 现在深度符合要求 那么可以进栈
-                            #
-                            #     self.stack.push(exist_screen.id)
-                            #     print('进栈')
-                            #     print('此时栈顶元素为')
-                            #     print(self.stack.top())
-                            #     print(self.stack.items)
-                            #
-                            #     logging.info('进栈')
-                            #     logging.info('此时栈顶元素为')
-                            #     logging.info(str(self.stack.top()))
-                            #     logging.info(str(self.stack.items))
 
                         else:
                             # 发现了新界面
-                            # self.cur_depth += 1
                             tmp_screen.id = self.screen_id
-                            # 当前深度不该这样记录
-                            # tmp_screen.depth = self.cur_depth
                             tmp_package_name = get_package_name()
                             if tmp_package_name == self.package_name:
                                 add_screen_flag = True
@@ -986,7 +918,6 @@ class Crawler():
                     self.cur_screen_id = self.stack.top()
 
                     # 设备页面进行回退
-                    # device.press("back")
                     device.press.back()
                     print('点击back')
                     logging.info('点击back')
@@ -1042,18 +973,6 @@ class Crawler():
         # 记录总边数
         logging.info('边的数量：' + str(len(self.edges)))
 
-        # 存储edges以及screen的信息 存为pickle的形式
-        # screens = pickle.dumps(self.screens)
-        # save_dir = self.path + '/' + 'result'
-        # if not os.path.exists(save_dir):
-        #     os.makedirs(save_dir)
-        # with open(save_dir + '/screens', 'wb') as f:
-        #     f.write(screens)
-        #
-        # edges = pickle.dumps(self.edges)
-        # with open(save_dir + '/edges', 'wb') as f:
-        #     f.write(edges)
-
         save_dir = self.path + '/' + 'result'
         # 直接将screens和边存储为model的模式
         self.model = GUIModel(self.screens, self.edges)
@@ -1064,78 +983,11 @@ class Crawler():
         visual_obj = VisualTool(self.screens, self.edges, save_dir)
         visual_obj.save_work()
 
-    def test(self):
-        # device.watcher('CLOSE').when(text='Later').click(text='Later')
-        # device.watchers.run()
-        # device.press.back()
-        # time.sleep(10)
-        # xml_info = device.dump(compressed=False)
-        # root = xeTree.fromstring(xml_info)
-        # nodes = parse_nodes(root)
-        # str = ''
-        # for node in nodes:
-        #     if node.attrib['text'] != '':
-        #         str += node.attrib['text']
-        # print(str)
-
-        # click里面必须要指定text才有用
-        # device.watcher("AUTO").when(text='取消').click(text='取消')
-        # device.watchers.run()
-        # device.watchers.watched = True
-        # print(device.watchers)
-        # print(device.watchers.triggered)
-
-        # xml_info = device.dump(compressed=False)
-        # root = xeTree.fromstring(xml_info)
-        # nodes = parse_nodes(root)
-        # for node in nodes:
-        #     print(node.attrib['text'])
-
-        # print(self.get_activity_name() == '')
-        # device.press.back()
-        # device.press.home()
-        #
-        # self.reopen_app()
-
-        xml_info = device.dump(compressed=False)
-        root = xeTree.fromstring(xml_info)
-        nodes = parse_nodes(root)
-        # act_name = self.get_activity_name()
-        # tmp_screen = Screen(nodes, -1, act_name)
-        for node in nodes:
-            print(node.attrib)
-
-        # device(text='CANCEL').click()
-
     def manual(self):
-
-        # dir = 'E:/毕业论文/ppt图片'
-        # dir = 'E:/pycharm文件/DT/example_codes/sources'
-        # if not os.path.exists(dir):
-        #     os.makedirs(dir)
-
-        # device.dump(dirPath + "/" + "1" + '.xml', compressed=False)
-        # device.screenshot(dir + "/" + 'content2' + '.png')
-
-        # device.dump(dir + "/" + "8.6.18" + '.xml', compressed=False)
-        # device.screenshot(dir + "/" + '8.6.18' + '.png')
 
         dir = 'C:/Users/dell/Desktop/tmp'
         device.dump(dir + "/" + "" + 'StageFever.xml', compressed=False)
         device.screenshot(dir + "/" + 'StageFever' + '.png')
-
-    def tmp_work(self):
-        # work_dir = 'E:/graduation/scrob_experiment/traverse/Currency/1.0/runner/result'
-        # f = open(work_dir + '/model', 'rb')
-        # model = pickle.load(f)
-        #
-        # visual_obj = VisualTool(model.screens, model.edges, work_dir)
-        # visual_obj.save_work()
-
-        # print(model.edges)
-        # print(model.screens)
-
-        device(text="Me").click()
 
 
 def get_package_name():
@@ -1150,12 +1002,6 @@ def get_package_name():
         cmd = "adb shell \"dumpsys window w | grep name=\""
         r = os.popen(cmd)
         info = r.readlines()
-
-        # for i in range(len(info)):
-        #     if "Activity" in info[i]:
-        #         flag = True
-        #         m = info[i].strip().split('/')
-        #         break
 
         for i in range(len(info)):
             if 'Activity' in info[i]:
@@ -1176,6 +1022,3 @@ if __name__ == '__main__':
     save_dir = 'E:/graduation/scrob_experiment/traverse_compare/Dianping/10.26/runner'
     obj = Crawler(package_name, save_dir)
     obj.run()
-    # obj.test()
-    # obj.manual()
-    # obj.tmp_work()

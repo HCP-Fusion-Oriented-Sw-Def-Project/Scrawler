@@ -10,22 +10,6 @@ def get_screen_sim(x_screen, y_screen):
     :return:
     """
 
-    # activity name 不同 直接返回0
-    # if x_screen.act_name != y_screen.act_name:
-    #     print('activity不同')
-    #     print(x_screen.act_name)
-    #     print(y_screen.act_name)
-    #     return 0
-
-    # 用于记录 tfidf返回的词汇表（因为它会内部处理一些较短词汇 然后如果为空 我自己的处理是补全为none）
-    xx_id_words = []
-    xx_text_words = []
-    xx_content_words = []
-
-    yy_id_words = []
-    yy_text_words = []
-    yy_content_words = []
-
     # 首先分别搜集元素的 id text content-desc
     x_id = []
     x_text = []
@@ -81,7 +65,6 @@ def get_screen_sim(x_screen, y_screen):
     yy_id_words, y_weight = get_words_vector_by_tfidf([y_id_str])
     id_sim = get_words_sim(xx_id_words, x_weight, yy_id_words, y_weight)
 
-    # print(y_words)
 
     # 计算text的相似度
     x_text_words = split_str(x_text)
@@ -90,7 +73,6 @@ def get_screen_sim(x_screen, y_screen):
     # 获取tfidf处理过的词汇
     xx_text_words, x_weight = get_words_vector_by_tfidf([x_text_str])
 
-    # print(x_words)
 
     y_text_words = split_str(y_text)
     tmp_str = ' '
@@ -99,7 +81,6 @@ def get_screen_sim(x_screen, y_screen):
     yy_text_words, y_weight = get_words_vector_by_tfidf([y_text_str])
     text_sim = get_words_sim(xx_text_words, x_weight, yy_text_words, y_weight)
 
-    # print(y_words)
 
     # 计算content的相似度
     x_content_words = split_str(x_content)
@@ -108,7 +89,6 @@ def get_screen_sim(x_screen, y_screen):
     # 获取tfidf处理过的词汇
     xx_content_words, x_weight = get_words_vector_by_tfidf([x_content_str])
 
-    # print(x_words)
 
     y_content_words = split_str(y_content)
     tmp_str = ' '
@@ -116,8 +96,6 @@ def get_screen_sim(x_screen, y_screen):
     # 获取tfidf处理过的词汇
     yy_content_words, y_weight = get_words_vector_by_tfidf([y_content_str])
     content_sim = get_words_sim(xx_content_words, x_weight, yy_content_words, y_weight)
-
-    # print(y_words)
 
     id_flag = True
     text_flag = True
@@ -146,12 +124,10 @@ def get_screen_sim(x_screen, y_screen):
     final_sim = 0
 
     # 要求各方面的相似值不能相差太大了
-    # sim_flag = True
     count = 0
     for score in sim_list:
         final_sim += score
         if score < 0.1:
-            # sim_flag = False
             count += 1
 
     if count / len(sim_list) < 0.5:
@@ -264,45 +240,6 @@ def is_xpath_matched(x_node, y_node):
     return False
 
 
-# def is_str_matched(x_node, y_node):
-#     """
-#     判断两个节点的文本属性是否可以匹配上
-#     因为有的时候 id text content-desc 并不总是相等的 可能会有微小的改变
-#     :param x_node:
-#     :param y_node:
-#     :return:
-#     """
-#
-#     if x_node.attrib['resource-id'] != '' or y_node.attrib['resource-id'] != '':
-#         x_id = x_node.attrib['resource-id']
-#         y_id = y_node.attrib['resource-id']
-#         if x_node.attrib['resource-id'] != '':
-#             x_id = x_id.split('/')[1]
-#
-#         if y_node.attrib['resource-id'] != '':
-#             y_id = y_id.split('/')[1]
-#
-#         id_sim = 1 - Levenshtein.distance(x_id, y_id) / max(len(x_id), len(y_id))
-#         if id_sim >= 0.5:
-#             return True
-#
-#     if x_node.attrib['text'] != '' or y_node.attrib['text'] != '':
-#         x_text = x_node.attrib['text']
-#         y_text = y_node.attrib['text']
-#         text_sim = 1 - Levenshtein.distance(x_text, y_text) / max(len(x_text), len(y_text))
-#         if text_sim >= 0.5:
-#             return True
-#
-#     if x_node.attrib['content-desc'] != '' or y_node.attrib['content-desc'] != '':
-#         x_content = x_node.attrib['content-desc']
-#         y_content = y_node.attrib['content-desc']
-#         content_sim = 1 - Levenshtein.distance(x_content, y_content) / max(len(x_content), len(y_content))
-#         if content_sim >= 0.5:
-#             return True
-#
-#     return False
-
-
 def get_str_sim(x_node, y_node):
     """
     获取两个节点间的字符文本相似度
@@ -363,13 +300,3 @@ def get_str_sim(x_node, y_node):
         return final_sim / len(sim_list)
     else:
         return final_sim
-
-# def test():
-#     a = 'SimCard'
-#     b = 'SimCard(0)'
-#     c = 'Phone'
-#     d = ' Phone(0)'
-#     print(1 - Levenshtein.distance(c, d) / max(len(c), len(d)))
-#
-#
-# test()

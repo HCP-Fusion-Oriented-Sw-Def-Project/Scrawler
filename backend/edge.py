@@ -33,12 +33,3 @@ def has_same_edge(screens, edges, begin_id, end_id, clicked_node):
                     return True
 
     return False
-
-# class EventSequence:
-#     """
-#     事件序列类
-#     """
-#
-#     def __init__(self):
-#         # 边的集合
-#         self.edges = []

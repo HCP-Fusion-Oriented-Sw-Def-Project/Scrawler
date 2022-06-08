@@ -4,26 +4,6 @@ import cv2
 from graphviz import Digraph
 
 
-# dot = Digraph(comment='The Round Table')
-#
-# img = cv2.imread('1.png')
-# x, y = img.shape[0:2]
-
-
-# 普通缩放 图片失真
-# img_test = cv2.resize(img, (int(y/10), int(x/10)))
-# cv2.imwrite('1test.png', img_test)
-
-# 使用最邻插值法缩放 仍然失真
-# img_test2 = cv2.resize(img, (0, 0), fx=0.1, fy=0.1, interpolation=cv2.INTER_AREA)
-# cv2.imwrite('2test.png', img_test2)
-
-
-# # 添加圆点
-# dot.node('1', shapefile='2test.png')
-# dot.node('2', shapefile='2test.png')
-# dot.edge('1', '2', label='中文', fontname='SimSun')  # 给边设置标签 666啊
-#
 # # 第一种保存图片的方式 首先直接打开网页进行展示 然后会保存
 # dot.view()
 
@@ -70,9 +50,6 @@ class VisualTool:
 
             self.dot.node(str(screen.id), shapefile=img_dir + '/' + str(screen.id) + '.png', fontsize='30')
 
-            # 普通版本
-            # self.dot.node(str(screen.id))
-
     def create_edges(self):
         """
         使用edges创建图中的边
@@ -90,28 +67,7 @@ class VisualTool:
                 label = clickable_node.attrib['resource-id'].split('/')[1] + '-' + clickable_node.attrib['bounds']
             else:
                 label = clickable_node.attrib['bounds']
-            # label = clickable_node.attrib['bounds']
             self.dot.edge(str(edge.begin_id), str(edge.end_id), label=label, fontname='SimSun', fontsize='30')
-
-    # def create_edges(self):
-    #     """
-    #     使用edges创建图中的边
-    #     :return:
-    #     """
-    #
-    #     for edge in self.edges:
-    #         node_id = edge.node_id
-    #         clickable_node = self.screens[edge.begin_id].get_node_by_id(node_id)
-    #         if clickable_node.attrib['text'] != '':
-    #             label = clickable_node.attrib['text']
-    #         elif clickable_node.attrib['content-desc'] != '':
-    #             label = clickable_node.attrib['content-desc']
-    #         elif clickable_node.attrib['resource-id'] != '':
-    #             label = clickable_node.attrib['resource-id'].split('/')[1]
-    #         else:
-    #             label = clickable_node.attrib['bounds']
-    #         # label = clickable_node.attrib['bounds']
-    #         self.dot.edge(str(edge.begin_id), str(edge.end_id), label=label, fontname='SimSun', fontsize='25')
 
 
     def save_graph(self):
@@ -120,7 +76,6 @@ class VisualTool:
         :return:
         """
 
-        # self.dot.render(filename='traverse_graph', directory=self.save_dir, view=True)
         self.dot.render(filename='traverse_graph2', directory=self.save_dir, view=True)
 
     def save_work(self):

@@ -15,7 +15,7 @@ def split_str(str_list):
 
     final_str_list = []
     # 把句子按字分开，中文按字分，英文按单词，数字按空格
-    res_eng = re.compile('[\\W]')  # 它那里是错的 把后面的*去掉 就可以分割单词了
+    res_eng = re.compile('[\\W]')
     res = re.compile(r"([\u4e00-\u9fa5])")
 
     for tmp_str in str_list:
@@ -26,10 +26,6 @@ def split_str(str_list):
             if res.split(str) is None:
                 str_list.append(str)
             else:
-                # # 获得分割中文的返回结果 这个方法会把中文分成一个个的汉字
-                # ret = res.split(str)
-                # for ch in ret:
-                #     str_list.append(ch)
 
                 # 说明存在中文 那可以尝试进行结巴分词
                 ret = jieba.cut(str)
@@ -40,8 +36,6 @@ def split_str(str_list):
             final_str_list.append(ch)
 
     final_str_list = [s for s in final_str_list if len(s.strip()) > 0]
-
-    # print(final_str_list)
 
     return final_str_list
 

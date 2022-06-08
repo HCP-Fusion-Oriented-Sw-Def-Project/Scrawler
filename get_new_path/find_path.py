@@ -278,15 +278,6 @@ class Searcher:
 
         print(self.result_edges_transfer)
 
-    def search_edge_transfer(self, tmp_edges, edge, des_id):
-        """
-        递归地对路径进行搜索
-        :param edge:
-        :param des_id:
-        :param edges:
-        :return:
-        """
-
     def replay(self):
         """
         将事件序列进行重放 然后构造重放所发生的边的转移
@@ -500,12 +491,6 @@ class Searcher:
             if screen.matched_id != -1:
                 self.screens_map[screen.id] = screen.matched_id
 
-                # print('--')
-                # print('base')
-                # print(screen.id)
-                # print('updated')
-                # print(screen.matched_id)
-                # print('--')\
 
         print(self.screens_map)
 
@@ -555,10 +540,6 @@ class Searcher:
         end_id = screen_list[len(screen_list) - 1]
         end_screen = self.scenario_model.screens[end_id]
 
-        # print(begin_screen.matched_id)
-        # print(end_screen.matched_id)
-        # print(self.screens_map)
-
         # 去新版本上搜索路径 所有的边转移序列保存在 self.result_edge_transfer中
         self.search_edge_transfer3(begin_screen.matched_id, end_screen.matched_id)
 
@@ -567,13 +548,6 @@ class Searcher:
             if edge_id_list != [-1]:
                 edge_id_list = edge_id_list[1:]
                 new_edges_transfer.append(edge_id_list)
-                # print('----------------------')
-                # for e_id in edge_id_list:
-                #     edge = self.updated_model.edges[e_id - 1]
-                #     print('***')
-                #     print(edge.begin_id, edge.end_id)
-                #     print(self.updated_model.screens[edge.begin_id].get_node_by_id(edge.node_id).attrib)
-                #     print('***')
 
         self.result_edges_transfer = new_edges_transfer
 
@@ -638,9 +612,6 @@ class Searcher:
         主函数
         :return:
         """
-
-        # 第一步先replay 获取场景模型 然后将更新版本的模型复制到这里 再进行下面的过程
-        # self.replay()
 
         self.read_model()
         self.map_for_screens()
@@ -712,71 +683,6 @@ class Searcher:
             img = cv2.imread(img_path)
             cv2.imwrite(tmp_dir + '/' + 'destination.png', img)
 
-    #
-    # def test(self):
-    #     self.read_model()
-    #     self.map_for_screens()
-    #     self.get_result_edges_sequences()
-    #
-    #     source_screens = []
-    #     source_edges = self.scenario_model.edges
-    #     for key in self.scenario_model.screens:
-    #         screen = self.scenario_model.screens[key]
-    #         source_screens.append(screen)
-    #
-    #     # result_path = self.result_edges_transfer[0]
-    #     # screens, edges = self.get_edges_and_screens(result_path)
-    #     # print(get_edge_sequences_sim(source_screens, source_edges, screens, edges, 1, 0, 3, 3))
-    #
-    #     max_score = 0
-    #     similar_transfer_id = -1
-    #     # 遍历所得结果的界面转移序列 找出相似度最大的那个转移序列
-    #     for i in range(len(self.result_edges_transfer)):
-    #         tmp_result_path = self.result_edges_transfer[i]
-    #         screens, edges = self.get_edges_and_screens(tmp_result_path)
-    #         score = get_edge_sequences_sim(source_screens, source_edges, screens, edges, 1, 0, 3, 3)
-    #         if score > max_score:
-    #             max_score = score
-    #             similar_transfer_id = i + 1
-    #
-    #     # 然后保存这条路径
-    #     result_dir = self.path + '/' + 'result'
-    #     optimal_path = result_dir + '/' + 'optimal'
-    #     tmp_dir = optimal_path + '/' + str(similar_transfer_id)
-    #     if not os.path.exists(tmp_dir):
-    #         os.makedirs(tmp_dir)
-    #
-    #     edge_id_list = self.result_edges_transfer[similar_transfer_id]
-    #
-    #     e_count = 1
-    #     for e_id in edge_id_list:
-    #         # 然后先找出边 然后找到页面 然后找到节点 画图
-    #         edge = self.updated_model.edges[e_id - 1]
-    #         # print(edge.begin_id)
-    #         # 然后找到页面
-    #         screen = self.updated_model.screens[edge.begin_id]
-    #         # 然后找到节点
-    #         clicked_node = screen.get_node_by_id(edge.node_id)
-    #
-    #         img_path = self.path + '/' + 'updated_screens' + '/' + str(screen.id) + '.png'
-    #         # 读取图片
-    #         img = cv2.imread(img_path)
-    #         # 画出点击节点
-    #         x1, y1, x2, y2 = clicked_node.parse_bounds()
-    #         cv2.rectangle(img, (x1, y1), (x2, y2), (0, 0, 255), 2)
-    #
-    #         cv2.imwrite(tmp_dir + '/' + 'action' + str(e_count) + '.png', img)
-    #         e_count += 1
-    #
-    #     # 然后在搜集一下终点的页面
-    #     e_id = edge_id_list[len(edge_id_list) - 1]
-    #     edge = self.updated_model.edges[e_id - 1]
-    #     # 然后找到页面
-    #     screen = self.updated_model.screens[edge.end_id]
-    #     img_path = self.path + '/' + 'updated_screens' + '/' + str(screen.id) + '.png'
-    #     # 读取图片
-    #     img = cv2.imread(img_path)
-    #     cv2.imwrite(tmp_dir + '/' + 'destination.png', img)
 
     def get_edges_and_screens(self, edge_path):
         """
@@ -894,7 +800,7 @@ def main():
     obj = Searcher(package_name, event_sequences, path, False)
     # obj.replay()
     # obj.work()
-    obj.get_elements()
+    # obj.get_elements()
 
 
 main()

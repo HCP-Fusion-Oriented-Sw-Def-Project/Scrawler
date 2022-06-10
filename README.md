@@ -36,10 +36,10 @@ Then run the script file `backend/crawler.py`.
 
 ######
 When the crawling process finished, we can get the results in the directory `save_dir/result/`:
-* **images** : screenshots.
-* **log**: which records the crawling process.
-* **model**: containing the screens and actions.
-* **traverse_graph**:  describing the crawing process.
+ * **images** : screenshots.
+ * **log**: which records the crawling process.
+ * **model**: containing the screens and actions.
+ * **traverse_graph**:  describing the crawing process.
 
 ######
 Besides, the GUI data of each screen is recorded in the directory `save_dir/screen_name`, in the form of screenshot and xml file.
@@ -67,13 +67,13 @@ Or we can view the process as finding the new execution path of an function for 
 3. Replay the event sequences in the base version, e.g., `obj.replay()` by running the script file `/get_new_path/find_path.py` and we can get the `scenario_model` in the work directory.
 4. Put the `updated_model` in the work directory.
 5. Set the parameters in the script file `/get_new_path/find_path.py`:
-  * `distinct_rate`: threshold to distinct different screens.
-  * `text_sim`: threshold to match screens.
-  * `is_circle`: whether the path in the results could contain circle.
-  *  `max_candidate_num`: the maximum number of candidate paths in the result.
+   * `distinct_rate`: threshold to distinct different screens.
+   * `text_sim`: threshold to match screens.
+   * `is_circle`: whether the path in the results could contain circle.
+   *  `max_candidate_num`: the maximum number of candidate paths in the result.
 6.  Run the script file `/get_new_path/find_path.py`  with only `obj.work()`, in this time we need not `obj.replay()`.
 
 When the repairing process finished, we can get the results in the directory `work_dir/result/`:
-* **candidate**: all candidate paths.
-* **optimal**: the best path.
+ * **candidate**: all candidate paths.
+ * **optimal**: the best path.
 

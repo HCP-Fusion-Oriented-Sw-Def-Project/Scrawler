@@ -49,7 +49,7 @@ Besides, the GUI data of each screen is recorded in the directory `save_dir/scre
 
 1. Set the work directory in the script file `backend/model_comparison.py`, e.g., `obj = Comparator('C:/Users/dell/Desktop/tmp_comparisio')`.
 2. Prepare the base and updated model of an app, and put them in the work directory, i.e., `base_model` and `updated_model`.
-3. Assure that the screens recorded in the model is in your file system.
+3. Assure that the screens recorded in the models are in your file system.
 
 Then run the script file `backend/model_comparison.py`.
 

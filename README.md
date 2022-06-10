@@ -42,7 +42,7 @@ When the crawling process finished, we can get the results in the directory `sav
 * **traverse_graph**:  describing the crawing process.
 
 ######
-Besides, the GUI data of each screen is in the directory `save_dir/screen_name`, in the form of screenshot and xml file.
+Besides, the GUI data of each screen is recorded in the directory `save_dir/screen_name`, in the form of screenshot and xml file.
 
 ## Compare the GUI models
 ######

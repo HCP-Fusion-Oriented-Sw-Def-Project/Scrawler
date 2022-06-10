@@ -63,7 +63,7 @@ When the comparing process finished, we can get the results in the directory `wo
 Or we can view the process as finding the new execution path of an function for the app in the updated version.
 
 1.  Set the work directory in the script file `/get_new_path/find_path.py`.
-2. Record the event sequences of an function in the base version with coordinates and Set the coordinates in the script file `/get_new_path/find_path.py`.
+2. Record the event sequences of an function in the base version with coordinates and set the coordinates in the script file `/get_new_path/find_path.py`.
 3. Replay the event sequences in the base version, e.g., `obj.replay()` by running the script file `/get_new_path/find_path.py` and we can get the `scenario_model` in the work directory.
 4. Put the `updated_model` in the work directory.
 5. Set the parameters in the script file `/get_new_path/find_path.py`:
